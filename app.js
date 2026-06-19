@@ -7,6 +7,11 @@ const svg = document.querySelector("#barcode-svg");
 const statusMessage = document.querySelector("#status-message");
 const downloadButton = document.querySelector("#download-button");
 const currentValue = document.querySelector("#current-value");
+const SVG_NS = "http://www.w3.org/2000/svg";
+const BARCODE_MARGIN = 20;
+const BARCODE_HEIGHT = 120;
+const LABEL_FONT_SIZE = 20;
+const LABEL_GAP = 26;
 
 let latestPngUrl = "";
 
@@ -41,14 +46,31 @@ function validateValue(value) {
 function renderBarcode(value) {
   JsBarcode(svg, value, {
     format: "CODE39",
-    displayValue: true,
-    font: "monospace",
-    fontSize: 20,
-    height: 120,
-    margin: 20,
-    background: "#ffffff",
+    displayValue: false,
+    height: BARCODE_HEIGHT,
+    margin: BARCODE_MARGIN,
+    background: "transparent",
     lineColor: "#111111",
   });
+
+  const viewBox = svg.viewBox.baseVal;
+  const totalWidth = viewBox && viewBox.width ? viewBox.width : svg.getBBox().width;
+  const totalHeight = viewBox && viewBox.height ? viewBox.height : svg.getBBox().height;
+  const labelWidth = Math.max(totalWidth - (BARCODE_MARGIN * 2), 1);
+  const label = document.createElementNS(SVG_NS, "text");
+
+  label.textContent = `*${value}*`;
+  label.setAttribute("x", String(BARCODE_MARGIN));
+  label.setAttribute("y", String(totalHeight + LABEL_GAP));
+  label.setAttribute("fill", "#111111");
+  label.setAttribute("font-family", "monospace");
+  label.setAttribute("font-size", String(LABEL_FONT_SIZE));
+  label.setAttribute("textLength", String(labelWidth));
+  label.setAttribute("lengthAdjust", "spacingAndGlyphs");
+
+  svg.append(label);
+  svg.setAttribute("height", `${totalHeight + LABEL_GAP + LABEL_FONT_SIZE + BARCODE_MARGIN}px`);
+  svg.setAttribute("viewBox", `0 0 ${totalWidth} ${totalHeight + LABEL_GAP + LABEL_FONT_SIZE + BARCODE_MARGIN}`);
 }
 
 async function createPngUrlFromSvg() {
@@ -76,8 +98,6 @@ async function createPngUrlFromSvg() {
 
     const context = canvas.getContext("2d");
     context.scale(scale, scale);
-    context.fillStyle = "#ffffff";
-    context.fillRect(0, 0, width, height);
     context.drawImage(image, 0, 0, width, height);
 
     return await new Promise((resolve, reject) => {
@@ -108,7 +128,7 @@ async function updateBarcode(rawValue) {
   }
 
   renderBarcode(value);
-  currentValue.textContent = value;
+  currentValue.textContent = `*${value}*`;
   revokeLatestPngUrl();
   latestPngUrl = await createPngUrlFromSvg();
   downloadButton.disabled = false;
