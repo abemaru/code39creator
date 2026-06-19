@@ -2,8 +2,13 @@
   "name": "code39creator",
   "version": "1.0.0",
   "description": "Static Code 39 barcode PNG generator for GitHub Pages",
+  "type": "module",
   "scripts": {
-    "serve": "npx serve ."
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:run": "vitest run"
   },
   "keywords": [
     "barcode",
@@ -13,6 +18,13 @@
   ],
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "@types/jsbarcode": "^3.11.4",
+    "jsdom": "^22.1.0",
+    "typescript": "^6.0.3",
+    "vite": "^5.4.19",
+    "vitest": "^1.6.1"
+  },
   "dependencies": {
     "jsbarcode": "^3.12.3"
   }
