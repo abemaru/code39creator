@@ -57,18 +57,28 @@ function renderBarcode(value) {
   const totalWidth = viewBox && viewBox.width ? viewBox.width : svg.getBBox().width;
   const totalHeight = viewBox && viewBox.height ? viewBox.height : svg.getBBox().height;
   const labelWidth = Math.max(totalWidth - (BARCODE_MARGIN * 2), 1);
+  const labelText = `*${value}*`;
   const label = document.createElementNS(SVG_NS, "text");
 
-  label.textContent = `*${value}*`;
+  label.textContent = labelText;
   label.setAttribute("x", String(BARCODE_MARGIN));
   label.setAttribute("y", String(totalHeight + LABEL_GAP));
   label.setAttribute("fill", "#111111");
   label.setAttribute("font-family", "monospace");
   label.setAttribute("font-size", String(LABEL_FONT_SIZE));
-  label.setAttribute("textLength", String(labelWidth));
-  label.setAttribute("lengthAdjust", "spacingAndGlyphs");
 
   svg.append(label);
+
+  if (labelText.length > 1) {
+    const naturalWidth = label.getComputedTextLength();
+    const gapCount = labelText.length - 1;
+    const extraSpacing = (labelWidth - naturalWidth) / gapCount;
+
+    if (Number.isFinite(extraSpacing) && extraSpacing > 0) {
+      label.style.letterSpacing = `${extraSpacing}px`;
+    }
+  }
+
   svg.setAttribute("height", `${totalHeight + LABEL_GAP + LABEL_FONT_SIZE + BARCODE_MARGIN}px`);
   svg.setAttribute("viewBox", `0 0 ${totalWidth} ${totalHeight + LABEL_GAP + LABEL_FONT_SIZE + BARCODE_MARGIN}`);
 }
