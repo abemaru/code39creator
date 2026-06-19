@@ -1,0 +1,19 @@
+{
+  "name": "code39creator",
+  "version": "1.0.0",
+  "description": "Static Code 39 barcode PNG generator for GitHub Pages",
+  "scripts": {
+    "serve": "npx serve ."
+  },
+  "keywords": [
+    "barcode",
+    "code39",
+    "github-pages",
+    "png"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jsbarcode": "^3.12.3"
+  }
+}

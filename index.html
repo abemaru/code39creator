@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code 39 PNG Generator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="panel">
+      <p class="eyebrow">Code 39 Barcode</p>
+      <h1>PNG を即生成</h1>
+      <p class="lead">
+        Code 39 に対応したバーコードを生成し、そのまま PNG として保存できます。
+      </p>
+
+      <form id="barcode-form" class="controls">
+        <label for="barcode-input">バーコード文字列</label>
+        <input
+          id="barcode-input"
+          name="barcode"
+          type="text"
+          value="CODE39-123"
+          autocomplete="off"
+          spellcheck="false"
+          maxlength="64"
+          aria-describedby="input-help status-message"
+        >
+        <p id="input-help" class="hint">
+          使用可能: A-Z / 0-9 / スペース / - . $ / + %
+        </p>
+
+        <div class="button-row">
+          <button type="submit" class="primary">生成する</button>
+          <button type="button" id="download-button" class="secondary" disabled>PNG を保存</button>
+        </div>
+      </form>
+
+      <p id="status-message" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="preview-card">
+      <div class="preview-header">
+        <h2>プレビュー</h2>
+        <span id="current-value" class="value-chip">CODE39-123</span>
+      </div>
+      <div class="preview-frame">
+        <svg id="barcode-svg"></svg>
+      </div>
+    </section>
+  </main>
+
+  <script src="vendor/JsBarcode.all.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
